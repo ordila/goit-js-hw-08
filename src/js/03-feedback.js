@@ -11,7 +11,7 @@ function fillContactForm() {
   if (userDataFromLs === null || userDataFromLs === undefined) {
     return;
   }
-  for (key of Object.keys(userDataFromLs)) {
+  for (const key of Object.keys(userDataFromLs)) {
     refs.formEl.elements[key].value = userDataFromLs[key];
   }
 }
