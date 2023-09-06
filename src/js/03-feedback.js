@@ -5,30 +5,34 @@ const refs = {
   formEl: document.querySelector('.js-contact-form'),
 };
 
-const userData = {};
+let userData = {};
 function fillContactForm() {
   const userDataFromLs = localStorageService.load('feedback-form-state');
-  if (userDataFromLs === null || userDataFromLs === undefined) {
+  if (userDataFromLs === undefined) {
     return;
   }
   for (const key of Object.keys(userDataFromLs)) {
-    refs.formEl.elements[key].value = userDataFromLs[key];
+    if (userDataFromLs.hasOwnProperty(key)) {
+      refs.formEl.elements[key].value = userDataFromLs[key];
+    }
   }
+  userData = userDataFromLs;
 }
 fillContactForm();
 
 function onFormElSubmit(event) {
   event.preventDefault();
   event.target.reset();
-  localStorage.clear();
+  localStorage.removeItem('feedback-form-state');
   console.log(userData);
+  userData = {};
 }
 refs.formEl.addEventListener(
   'input',
   _.throttle(event => {
     const { target: contactFormElement } = event;
-    const value = contactFormElement.value;
     const name = contactFormElement.name;
+    const value = contactFormElement.value;
 
     userData[name] = value;
     localStorageService.save('feedback-form-state', userData);
